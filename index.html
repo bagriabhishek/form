@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+</head>
+<body>
+    All Users:
+    <div id="users"></div>
+    <a href="/addUser.html">
+        <button>Add new User</button>
+    </a>
+</body>
+<script>
+    const getUserHTML = (user, index) => {
+        // console.log(user)
+        return `
+            <div>
+                <hr>
+                First name: <span> ${user.firstName}</span> <br/>
+                Last name: <span> ${user.lastName}</span> <br/>
+                Email: <span> ${user.email}</span> <br/>
+                Phone: <span> ${user.phone}</span> <br/>
+                Gender: <span> ${user.gender}</span> <br/>
+                Date of birth: <span> ${user.dob.date}/${user.dob.month}/${user.dob.year}</span> <br/>
+                Country: <span> ${user.country}</span> <br/>
+                State: <span> ${user.state}</span> <br/>
+                City: <span> ${user.city}</span> <br/>
+                Pin Code: <span> ${user.pincode}</span> <br/>
+                Hobbies: <span> ${user.hobbies}</span> <br/>
+                <button onclick="deleteUser(${index})" >Delete User</button>
+                <button onclick="updateUser(${index})" >Update User</button>
+                <hr>
+            </div>
+        `;
+    }
+    const displayUsers = () => {
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        // console.log(users)
+        const usersContainer = document.getElementById('users');
+        usersContainer.innerHTML = "";
+        if(users.length === 0){
+            usersContainer.innerText = `User list is empty, click addUser to add some.`;
+            return;
+        }
+        users.forEach((user, index) => {
+            usersContainer.innerHTML += getUserHTML(user, index);
+        });
+    }
+    const deleteUser = index => {
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        if(index >= users.length)    return;
+        users.splice(index, 1);
+        localStorage.setItem('users', JSON.stringify(users));
+        displayUsers();
+    }
+    const updateUser = index => {
+        sessionStorage.setItem('updateUserIdx', index);
+        location = "./updateUser.html"
+    }
+    displayUsers();
+</script>
+</html>
